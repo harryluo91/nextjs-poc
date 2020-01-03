@@ -1,0 +1,15 @@
+@import '../mixins.scss';
+
+.container {
+	@include container();
+}
+
+.listWrapper {
+	padding: 0;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.linkItem {
+	padding: 1rem;
+}
