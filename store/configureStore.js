@@ -8,6 +8,7 @@ const makeStore = (initialState, options) =>
 			auth: authReducer,
 			// user: userReducer,
 		},
+		preloadedState: initialState,
 	});
 
 export default makeStore;

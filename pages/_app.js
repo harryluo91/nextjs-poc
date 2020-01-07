@@ -1,36 +1,37 @@
+import App from 'next/app';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { Container } from 'next/app';
 import withRedux from 'next-redux-wrapper';
+import { IntlProvider } from 'react-intl';
 
 import makeStore from '../store/configureStore';
 import Layout from '../components/layouts/layout';
 
-function MyApp({ Component, store, pageProps }) {
-	const { pageName, ...props } = pageProps;
-	return (
-		<Container>
+class MyApp extends App {
+	static async getInitialProps({ Component, ctx }) {
+		// Get the `locale` and `messages` from the request object on the server.
+		// In the browser, use the same values that the server serialized.
+		const { req } = ctx;
+		const { locale, messages } = req || window.__NEXT_DATA__.initialProps;
+		return {
+			pageProps: Component.getInitialProps ? await Component.getInitialProps(ctx) : {},
+			locale,
+			messages,
+		};
+	}
+
+	render() {
+		const { Component, pageProps, store, locale, messages } = this.props;
+		return (
 			<Provider store={store}>
-				<Layout pageName={pageName}>
-					<Component {...props} />
-				</Layout>
+				<IntlProvider key={locale} locale={locale} defaultLocale={locale} messages={messages}>
+					<Layout pageName={pageProps.pageName}>
+						<Component {...pageProps} />
+					</Layout>
+				</IntlProvider>
 			</Provider>
-		</Container>
-	);
+		);
+	}
 }
 
-// Only uncomment this method if you have blocking data requirements for
-// every single page in your application. This disables the ability to
-// perform automatic static optimization, causing every page in your app to
-// be server-side rendered.
-//
-MyApp.getInitialProps = async ({ Component, ctx }) => {
-	// calls page's `getInitialProps` and fills `appProps.pageProps`
-	return {
-		pageProps: {
-			// Call page-level getInitialProps
-			...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {}),
-		},
-	};
-};
-
-export default withRedux(makeStore, { debug: true })(MyApp);
+export default withRedux(makeStore)(MyApp);

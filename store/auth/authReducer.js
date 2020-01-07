@@ -3,9 +3,9 @@ import { createReducer } from '@reduxjs/toolkit';
 import { InitialState } from './authModels';
 
 const authReducer = createReducer(InitialState, {
-	LOGIN: (state, payload) => {
-		state.userId = payload.userId;
-		state.authToken = payload.authToken;
+	LOGIN: (state, action) => {
+		state.userId = action.payload.userId;
+		state.authToken = action.payload.authToken;
 	},
 });
 
