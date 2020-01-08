@@ -6,7 +6,7 @@ import styles from '../styles/components/header.scss';
 
 const HEADER_LINKS = [
 	{ path: '/', label: 'Home' },
-	{ path: '/item-list', label: 'Item List' },
+	{ path: '/items', label: 'Items' },
 	{ path: '/login', label: 'Login' },
 ].map(link => {
 	link.key = `nav-link-${link.path}-${link.label}`;
