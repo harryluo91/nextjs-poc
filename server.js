@@ -11,7 +11,6 @@ const routes = require('./routes');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-const handler = routes.getRequestHandler(app);
 
 const localeDataCache = new Map();
 const getLocaleDataScript = locale => {
@@ -35,21 +34,20 @@ const getMessages = locale => {
 
 app.prepare().then(() => {
 	const server = express();
-	// const locale = 'en';
-	// const localeDataScript = getLocaleDataScript(locale);
-	// const messages = getMessages(locale);
 
-	server.get('*', (req, res) => {
-		console.log('hello');
-		const locale = 'en';
-		req.locale = locale;
-		req.localeDataScript = getLocaleDataScript(locale);
-		req.messages = getMessages(locale);
-
-		return handle(req, res);
-	});
-
-	server.use(handler);
+	server.use(
+		routes.getRequestHandler(app, ({ req, res, route, query }) => {
+			if (route) {
+				const locale = 'en';
+				req.locale = locale;
+				req.localeDataScript = getLocaleDataScript(locale);
+				req.messages = getMessages(locale);
+				app.render(req, res, route.page, query);
+			} else {
+				handle(req, res);
+			}
+		})
+	);
 
 	server.listen(3000, err => {
 		if (err) throw err;

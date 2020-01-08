@@ -1,6 +1,10 @@
 const nextRoutes = require('next-routes');
 const routes = (module.exports = nextRoutes());
 
-routes.add('home', '/');
+routes.add('home', '/', 'home');
 routes.add('login', '/login');
-routes.add('itemList', '/item-list');
+routes.add({
+	name: 'item-list',
+	pattern: '/item-list',
+	page: 'itemList',
+});

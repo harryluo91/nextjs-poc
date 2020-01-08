@@ -5,7 +5,7 @@ import { Link } from '../routes';
 import styles from '../styles/components/header.scss';
 
 const HEADER_LINKS = [
-	{ path: '/home', label: 'Home' },
+	{ path: '/', label: 'Home' },
 	{ path: '/item-list', label: 'Item List' },
 	{ path: '/login', label: 'Login' },
 ].map(link => {

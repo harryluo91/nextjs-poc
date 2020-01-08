@@ -12,7 +12,7 @@ class MyApp extends App {
 		// Get the `locale` and `messages` from the request object on the server.
 		// In the browser, use the same values that the server serialized.
 		const { req } = ctx;
-		const { locale, messages } = req || window.__NEXT_DATA__.initialProps;
+		const { locale, messages } = req || window.__NEXT_DATA__.props.initialProps;
 		return {
 			pageProps: Component.getInitialProps ? await Component.getInitialProps(ctx) : {},
 			locale,
